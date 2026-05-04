@@ -22,6 +22,56 @@ class Scene {
   private LinkedList<Actor> enemies;
   private HashMap<WorldObject, Position> positions;
   private HashMap<Direction, Position> doors;
+  Position[][] positionArray;    //array to create a cell for every position index; so world Objects can later be put into it
+
+
+  //scene constructor used WHEN NO JSON FILE IS BEING LOADED FROM
+  Scene(){
+    roomWidth = 10 + int(random(6));
+    roomHeight = 8 + int(random(6));
+    
+    room = new WorldObject[roomWidth][roomHeight];
+    enemies = new LinkedList<Actor>();
+    positions = new HashMap<WorldObject, Position>();
+    doors = new HashMap<Direction, Position>();
+    
+    //entry needs to = the direction the player was facing when they entered the door
+    entry = Direction.SOUTH; //temp, needs to be changed
+    player = new Player(entry);
+    positionArray = new Position[roomWidth][roomHeight]; //array to create a cell for every position index; so world Objects can later be put into it
+    
+    reset(entry);
+  }
+  
+  
+  
+  //scene constructor used WHEN LOADING FROM A JSON FILE
+  Scene(JSONObject object){
+    this.roomWidth = object.getInt("roomWidth");
+    this.roomHeight = object.getInt("roomHeight");
+    
+    //need to finish setting the info in here so that when scene is constructed from a JSON it has the data it needs
+  }
+  
+  
+  
+  //sets everything INSIDE A JSON OBJECT THAT CAN LATER BE LOADED
+  JSONObject serialize(){
+    JSONObject object = new JSONObject();
+    object.setInt("roomWidth", this.roomWidth);
+    object.setInt("roomHeight", this.roomHeight);
+    
+    
+    
+    //how do you set these arrays up to save data when the size of the array will be random because of the room generation
+    
+    //when making array of arrays you have to construct new jsonarrays for every row of arrays
+    //make a 2d array to store what data is on what tile/square (enemy, player, obstacle, interactable, null)
+    //need to serialize everything in the room HERE
+    return object;
+    
+  }
+
 
   /**
    *      Method: private reset()
@@ -31,14 +81,29 @@ class Scene {
    * Description: Resets the room to a random state
    */
 
+
   private void reset(Direction entry) {
     if (entry == null) {
       return;
     }
+    
+    positions.clear();
+    
+    //array creates the room logically (used for collision and other functions); currently fills it with null (add an algorythym that determines where to put obstacles)
+    for( int i = 0; i < roomHeight; i++){
+      
+      for( int q = 0; q < roomWidth; q++){    
+        room[q][i] = null;   
+        positionArray[q][i] = new Position(q, i, this);   //array essentialy creates a map of the room (used for tracking positions so objects know where to be drawn)
+      }
+      
+    }
+    
+    
+    //this is where you can put obstacles and interactables into the hashmap now that all positions have been created
+    room[int(roomWidth / 2)][int(roomHeight / 2)] = player; //temp, maybe make it so player starts by whatever door they came through
+    positions.put(player,  positionArray[int(roomWidth / 2)][int(roomHeight / 2)] );  //everytime you set the player or anything elses position in room you HAVE TO SET the position in the position hashmap immediately after
 
-    //----------------------------\\
-    // TODO: COMPLETE THIS METHOD \\
-    //----------------------------\\
   }
 
   /**
@@ -50,7 +115,7 @@ class Scene {
    */
 
   private void updateActions(Actor actor) {
-    for (Action action: Action.values()) {
+    for (Action action : Action.values()) {
       actor.setActionValidity(action, this.isActionValid(actor, action));
     }
   }
@@ -74,6 +139,7 @@ class Scene {
     }
 
     // Get the player's action
+    this.updateActions(this.player); //trying to make actions update before checking what action is being made, same one used in the enemies check action
     Action action = this.player.getAction();
 
     // If no action was chosen, do nothing
@@ -171,6 +237,7 @@ class Scene {
           enemy.updateHealth(-actor.getDamage());
         } else {
           this.room[x][y] = null;
+          this.positions.remove(enemy); //if the enemy dies remove it from the positions map
         }
       }
 
@@ -271,6 +338,9 @@ class Scene {
    */
 
   public void keyPressed() {
+    if (key == 'p'){
+      print(positions.get(player).getX() + "," + positions.get(player).getY() + " ");
+    }
     if (this.player != null) {
       this.player.keyPressed();
     }
@@ -297,11 +367,45 @@ class Scene {
    */
 
   public void draw() {
+    
     // Determine the floor size
     float size = min((float)width / (this.roomWidth + 2), (float)height / (this.roomHeight + 2));
+    
+    translate( (width - roomWidth * size) * 0.5, (height - roomHeight * size) * 0.5 ); 
+    push();
+    fill(255);
+    stroke(0);
+    for(int i = 0; i < roomHeight; i++){
+      
+      for(int q = 0; q < roomWidth; q++){
+        square( q * size, i * size, size);
+      }
+      
+    }
+    pop();
+    
+    //by scaling by size you are essentially making everything one to one
+    scale(size);
+    
+  
+    for (WorldObject obj : positions.keySet()) {  //trying to loop through every world object room to get their position and then translate them to the correct position visually
 
-    //----------------------------\\
-    // TODO: COMPLETE THIS METHOD \\
-    //----------------------------\\
+      if (positions.get(obj) != null) {
+        push();
+        translate(positions.get(obj).getX(), positions.get(obj).getY());
+        obj.draw();
+        pop();
+      }
+    }
+   
   }
 }
+
+
+//whats left to do:
+//1. add logic to spawn obstacles into the scene
+//2. add logic to spawn enemies into the scene
+//3. add logic to spawn interactables into the scene
+//4. finish the JSON constructor and serialize function
+//5. make doors
+//6. figure out the how to make you enter the same direction you were facing
