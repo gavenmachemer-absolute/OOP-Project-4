@@ -12,6 +12,12 @@
 class Player extends Actor {
   private char nextKey;
   private HashMap<Character, Boolean> debounce;
+  //create images for player sprites
+  PImage playerNorth;
+  PImage playerEast;
+  PImage playerSouth;
+  PImage playerWest;
+  
 
   /**
    * Constructor: public Player()
@@ -21,6 +27,10 @@ class Player extends Actor {
 
   public Player(Direction direction) {
     super(100, 10, direction);
+    
+    //load images for player sprites
+    loadSprites();
+    
     this.nextKey = '\0';
     this.debounce = new HashMap<Character, Boolean>();
   }
@@ -33,6 +43,7 @@ class Player extends Actor {
 
   public Player(JSONObject object) {
     super(object);
+    loadSprites();
     this.nextKey = '\0';
     this.debounce = new HashMap<Character, Boolean>();
   }
@@ -141,5 +152,41 @@ class Player extends Actor {
     if (debounce.getOrDefault(released, false)) {
       debounce.put(released, false);
     }
+  }
+  
+  void loadSprites(){
+    playerNorth = loadImage("4playerNorth.png");
+    playerEast = loadImage("4playerEast.png");
+    playerSouth = loadImage("4playerSouth.png");
+    playerWest = loadImage("4playerWest.png");
+  }
+  
+  void draw(){  //scene.positions
+    
+    super.draw();
+    
+    push();
+    imageMode(CENTER);
+    switch(this.facing){
+      
+      case NORTH:
+        image(playerNorth, 0.5, 0.5, 0.5, 0.5); //everything gets scaled and translated in scene draw, by setting it at 0.5 its draw in the middle of the tile and then can be translated
+        break;
+        
+      case EAST:
+        image(playerEast, 0.5, 0.5, 0.5, 0.5);
+        break;
+        
+      case SOUTH:
+        image(playerSouth, 0.5, 0.5, 0.5, 0.5);
+        break;
+        
+      case WEST:
+        image(playerWest, 0.5, 0.5, 0.5, 0.5);
+        break;
+        
+    }
+    pop();
+
   }
 }

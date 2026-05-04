@@ -131,4 +131,28 @@ abstract class Actor extends WorldObject {
    */
 
   abstract public Action getAction();
+  
+  
+  void draw(){
+    
+    float healthWidth = 0.8;
+    float healthHeight = 0.1;
+    float healthPercent = getHealth();   
+    
+    //health depleted background - red
+    push();
+    noStroke();
+    fill(255, 0, 0);
+    rect( 0.1 , .05, healthWidth, healthHeight);
+    pop();
+    
+    //current health - green
+    push();
+    noStroke();
+    fill(0, 255, 0);
+    rect( 0.1 , .05, healthWidth * healthPercent, healthHeight);
+    pop();
+    
+    
+  }
 }
