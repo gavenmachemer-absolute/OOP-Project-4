@@ -26,7 +26,7 @@ void setup() {
   fullScreen(P2D);
   pixelDensity(1);
   
-  backgroundMusic = new SoundFile(this, "background.wav");
+  backgroundMusic = new SoundFile(this, "background.mp3");
   backgroundMusic.amp(0.35);
   backgroundMusic.loop();
   
