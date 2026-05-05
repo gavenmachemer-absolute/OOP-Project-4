@@ -9,9 +9,11 @@
  * Description: A dungeon crawler game
  */
 
+import processing.sound.*;
+
 Scene scene;
 String fileName;
-
+SoundFile backgroundMusic;
 /**
  *      Method: setup()
  *  Parameters: void
@@ -23,6 +25,11 @@ String fileName;
 void setup() {
   fullScreen(P2D);
   pixelDensity(1);
+  
+  backgroundMusic = new SoundFile(this, "background.wav");
+  backgroundMusic.amp(0.35);
+  backgroundMusic.loop();
+  
   fileName = "data" + File.separator + "save.json";
   File file = new File(fileName);
 
