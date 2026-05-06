@@ -481,9 +481,6 @@ class Scene {
    */
 
   public void keyPressed() {
-    if (key == 'p') {
-      print(positions.get(player).getX() + "," + positions.get(player).getY() + " ");
-    }
     if (this.player != null) {
       this.player.keyPressed();
     }
