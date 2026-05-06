@@ -1,5 +1,5 @@
 /**
- *      Author: Prof. Morales
+ *      Author: Prof. Morales, Gaven Machemer
  *      Course: CPSC 220
  *  Instructor: Prof. Morales
  *     Created: 2026-04-15
@@ -23,53 +23,75 @@ class Scene {
   private HashMap<WorldObject, Position> positions;
   private HashMap<Direction, Position> doors;
   Position[][] positionArray;    //array to create a cell for every position index; so world Objects can later be put into it
+  Obstacle obstacle1;
+  Obstacle obstacle2;
+  Obstacle obstacle3;
+  Obstacle obstacle4;
+
+  PImage topDoorO;
+  PImage topDoorC;
+
+  PImage rightDoorO;
+  PImage rightDoorC;
+
+  PImage lowDoorO;
+  PImage lowDoorC;
+
+  PImage leftDoorO;
+  PImage leftDoorC;
 
 
   //scene constructor used WHEN NO JSON FILE IS BEING LOADED FROM
-  Scene(){
+  Scene() {
+    loadSprites();
     roomWidth = 10 + int(random(6));
     roomHeight = 8 + int(random(6));
-    
+
     room = new WorldObject[roomWidth][roomHeight];
     enemies = new LinkedList<Actor>();
     positions = new HashMap<WorldObject, Position>();
     doors = new HashMap<Direction, Position>();
-    
+
     //entry needs to = the direction the player was facing when they entered the door
     entry = Direction.SOUTH; //temp, needs to be changed
     player = new Player(entry);
     positionArray = new Position[roomWidth][roomHeight]; //array to create a cell for every position index; so world Objects can later be put into it
-    
+
+    obstacle1 = new Obstacle();
+    obstacle2 = new Obstacle();
+    obstacle3 = new Obstacle();
+    obstacle4 = new Obstacle();
+
     reset(entry);
   }
-  
-  
-  
+
+
+
   //scene constructor used WHEN LOADING FROM A JSON FILE
-  Scene(JSONObject object){
+  Scene(JSONObject object) {
+    loadSprites();
     this.roomWidth = object.getInt("roomWidth");
     this.roomHeight = object.getInt("roomHeight");
-    
+
     //need to finish setting the info in here so that when scene is constructed from a JSON it has the data it needs
   }
-  
-  
-  
+
+
+
   //sets everything INSIDE A JSON OBJECT THAT CAN LATER BE LOADED
-  JSONObject serialize(){
+  JSONObject serialize() {
     JSONObject object = new JSONObject();
     object.setInt("roomWidth", this.roomWidth);
     object.setInt("roomHeight", this.roomHeight);
-    
-    
-    
+
+
+
     //how do you set these arrays up to save data when the size of the array will be random because of the room generation
-    
+
     //when making array of arrays you have to construct new jsonarrays for every row of arrays
     //make a 2d array to store what data is on what tile/square (enemy, player, obstacle, interactable, null)
     //need to serialize everything in the room HERE
     return object;
-    
   }
 
 
@@ -83,28 +105,124 @@ class Scene {
 
 
   private void reset(Direction entry) {
+    this.entry = entry;
     if (entry == null) {
       return;
     }
-    
+
     positions.clear();
-    
+    enemies.clear();
+    doors.clear();
+
+    roomWidth = 10 + int(random(6));
+    roomHeight = 8 + int(random(6));
+    room = new WorldObject[roomWidth][roomHeight];
+    positionArray = new Position[roomWidth][roomHeight];
+
+
     //array creates the room logically (used for collision and other functions); currently fills it with null (add an algorythym that determines where to put obstacles)
-    for( int i = 0; i < roomHeight; i++){
-      
-      for( int q = 0; q < roomWidth; q++){    
-        room[q][i] = null;   
+    for ( int i = 0; i < roomHeight; i++) {
+
+      for ( int q = 0; q < roomWidth; q++) {
+        room[q][i] = null;
         positionArray[q][i] = new Position(q, i, this);   //array essentialy creates a map of the room (used for tracking positions so objects know where to be drawn)
       }
-      
     }
-    
-    
-    //this is where you can put obstacles and interactables into the hashmap now that all positions have been created
-    room[int(roomWidth / 2)][int(roomHeight / 2)] = player; //temp, maybe make it so player starts by whatever door they came through
-    positions.put(player,  positionArray[int(roomWidth / 2)][int(roomHeight / 2)] );  //everytime you set the player or anything elses position in room you HAVE TO SET the position in the position hashmap immediately after
 
+    //doors and player------------------------------------------------------------------------
+
+    // North door
+    doors.put(Direction.NORTH, positionArray[int(random(2, roomWidth - 2))][0]);
+
+    // South door
+    doors.put(Direction.SOUTH, positionArray[int(random(2, roomWidth - 2))][roomHeight - 1]);
+
+    // West door
+    doors.put(Direction.WEST, positionArray[0][int(random(2, roomHeight-2))]);
+
+    // East door
+    doors.put(Direction.EAST, positionArray[roomWidth - 1][int(random(2, roomHeight - 2))]);
+
+    //this is where you can put obstacles and interactables into the hashmap now that all positions have been created
+    Position playerStart = new Position(doors.get(entry.inverse()).getX(), doors.get(entry.inverse()).getY(), this);
+    room[ playerStart.getX() ][ playerStart.getY() ] = player;
+    positions.put(player, playerStart );  //everytime you set the player or anything elses position in room you HAVE TO SET the position in the position hashmap immediately after
+
+    //obstacle focused------------------------------------------------------------------------------
+    int r1;
+    int r2;
+    int r3;
+    int r4;
+    int r5;
+    int r6;
+    int r7;
+    int r8;
+
+    do {
+      r1 = int(random(1, roomWidth - 1));
+      r2 = int(random(1, roomHeight - 1));
+    } while (room[r1][r2] != null);
+    room[r1][r2] = obstacle1;
+    positions.put(obstacle1, positionArray[r1][r2]);
+
+    do {
+      r3 = int(random(1, roomWidth - 1));
+      r4 = int(random(1, roomHeight - 1));
+    } while (room[r3][r4] != null);
+    room[r3][r4] = obstacle2;
+    positions.put(obstacle2, positionArray[r3][r4]);
+
+    do {
+      r5 = int(random(1, roomWidth - 1));
+      r6 = int(random(1, roomHeight - 1));
+    } while (room[r5][r6] != null);
+    room[r5][r6] = obstacle3;
+    positions.put(obstacle3, positionArray[r5][r6]);
+
+    do {
+      r7 = int(random(1, roomWidth - 1));
+      r8 = int(random(1, roomHeight - 1));
+    } while (room[r7][r8] != null);
+    room[r7][r8] = obstacle4;
+    positions.put(obstacle4, positionArray[r7][r8]);
+
+
+    //put enemies into game ----------------------------------------------------------------------------------------
+    for (int i = 0; i < int(random(2,3.5)); i++) {
+      int x;
+      int y;
+
+      do {
+        x = int(random(1, roomWidth - 1));
+        y = int(random(1, roomHeight - 1));
+      } while (room[x][y] != null);
+
+      Direction dir = Direction.values()[int(random(Direction.values().length))];
+      Goblin goblin = new Goblin(dir);
+
+      room[x][y] = goblin;
+      positions.put(goblin, positionArray[x][y]);
+      enemies.add(goblin);
+    }
   }
+
+
+
+
+  void loadSprites() {
+    topDoorO = loadImage("topDoorOpen.png");
+    topDoorC = loadImage("topDoorClosed.png");
+
+    rightDoorO = loadImage("rightDoorOpen.png");
+    rightDoorC = loadImage("rightDoorClosed.png");
+
+    lowDoorO = loadImage("bottomDoorOpen.png");
+    lowDoorC = loadImage("bottomDoorClosed.png");
+
+    leftDoorO = loadImage("leftDoorOpen.png");
+    leftDoorC = loadImage("leftDoorClosed.png");
+  }
+
 
   /**
    *      Method: private updateActions()
@@ -338,7 +456,7 @@ class Scene {
    */
 
   public void keyPressed() {
-    if (key == 'p'){
+    if (key == 'p') {
       print(positions.get(player).getX() + "," + positions.get(player).getY() + " ");
     }
     if (this.player != null) {
@@ -367,27 +485,71 @@ class Scene {
    */
 
   public void draw() {
-    
+
     // Determine the floor size
     float size = min((float)width / (this.roomWidth + 2), (float)height / (this.roomHeight + 2));
-    
-    translate( (width - roomWidth * size) * 0.5, (height - roomHeight * size) * 0.5 ); 
+
+    translate( (width - roomWidth * size) * 0.5, (height - roomHeight * size) * 0.5 );
     push();
-    fill(255);
+    fill(235, 155, 52);
     stroke(0);
-    for(int i = 0; i < roomHeight; i++){
-      
-      for(int q = 0; q < roomWidth; q++){
+    for (int i = 0; i < roomHeight; i++) {
+
+      for (int q = 0; q < roomWidth; q++) {
         square( q * size, i * size, size);
       }
-      
     }
     pop();
-    
+
     //by scaling by size you are essentially making everything one to one
     scale(size);
-    
-  
+
+    //handles door sprites
+    for (Direction dir : doors.keySet()) {
+      Position p = doors.get(dir);
+      if (this.enemies.size() == 0 && dir != entry.inverse()) {
+        push();
+        switch(dir) {
+        case NORTH:
+          image(topDoorO, p.getX(), p.getY() - 1, 1, 1);
+          break;
+
+        case EAST:
+          image(rightDoorO, p.getX() + 1, p.getY(), 1, 1);
+          break;
+
+        case SOUTH:
+          image(lowDoorO, p.getX(), p.getY() + 1, 1, 1);
+          break;
+
+        case WEST:
+          image(leftDoorO, p.getX() - 1, p.getY(), 1, 1);
+          break;
+        }
+        pop();
+      } else {
+        push();
+        switch(dir) {
+        case NORTH:
+          image(topDoorC, p.getX(), p.getY() - 1, 1, 1);
+          break;
+
+        case EAST:
+          image(rightDoorC, p.getX() + 1, p.getY(), 1, 1);
+          break;
+
+        case SOUTH:
+          image(lowDoorC, p.getX(), p.getY() + 1, 1, 1);
+          break;
+
+        case WEST:
+          image(leftDoorC, p.getX() - 1, p.getY(), 1, 1);
+          break;
+        }
+        pop();
+      }
+    }
+
     for (WorldObject obj : positions.keySet()) {  //trying to loop through every world object room to get their position and then translate them to the correct position visually
 
       if (positions.get(obj) != null) {
@@ -397,15 +559,10 @@ class Scene {
         pop();
       }
     }
-   
   }
 }
 
 
 //whats left to do:
-//1. add logic to spawn obstacles into the scene
-//2. add logic to spawn enemies into the scene
-//3. add logic to spawn interactables into the scene
-//4. finish the JSON constructor and serialize function
-//5. make doors
-//6. figure out the how to make you enter the same direction you were facing
+//1. add logic to spawn interactables into the scene
+//2. finish the JSON constructor and serialize function
