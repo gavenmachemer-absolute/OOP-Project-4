@@ -33,15 +33,15 @@ void setup() {
   fileName = "data" + File.separator + "save.json";
   File file = new File(fileName);
 
-  if (file.exists()) {
-    JSONObject data = loadJSONObject(fileName);
-    scene = new Scene(data);
-  } else {
+  //if (file.exists()) {
+    //JSONObject data = loadJSONObject(fileName);
+    //scene = new Scene(data);
+  //} else {
     scene = new Scene();
     JSONObject data = scene.serialize();
     file.getParentFile().mkdirs();
     saveJSONObject(data, fileName);
-  }
+  //}
 }
 
 /**
