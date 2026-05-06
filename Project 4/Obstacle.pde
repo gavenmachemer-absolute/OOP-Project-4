@@ -26,12 +26,12 @@ class Obstacle extends Actor {
     rectMode(CENTER);
     noStroke();
     fill(255, 0, 0);
-    rect( 0.5, .05, healthWidth, healthHeight);
+    rect( 0.5, .1, healthWidth, healthHeight);
 
     //current health - green
     noStroke();
     fill(0, 255, 0);
-    rect( 0.5, .05, healthWidth * healthPercent, healthHeight);
+    rect( 0.5, .1, healthWidth * healthPercent, healthHeight);
     
     image(vase, 0, 0, 1, 1);
     pop();
