@@ -164,6 +164,7 @@ class Scene {
     } while (room[r1][r2] != null);
     room[r1][r2] = obstacle1;
     positions.put(obstacle1, positionArray[r1][r2]);
+    obstacle1.updateHealth(10);
 
     do {
       r3 = int(random(1, roomWidth - 1));
@@ -171,6 +172,7 @@ class Scene {
     } while (room[r3][r4] != null);
     room[r3][r4] = obstacle2;
     positions.put(obstacle2, positionArray[r3][r4]);
+    obstacle2.updateHealth(10);
 
     do {
       r5 = int(random(1, roomWidth - 1));
@@ -178,17 +180,18 @@ class Scene {
     } while (room[r5][r6] != null);
     room[r5][r6] = obstacle3;
     positions.put(obstacle3, positionArray[r5][r6]);
-
+    obstacle3.updateHealth(10);
+ 
     do {
       r7 = int(random(1, roomWidth - 1));
       r8 = int(random(1, roomHeight - 1));
     } while (room[r7][r8] != null);
     room[r7][r8] = obstacle4;
     positions.put(obstacle4, positionArray[r7][r8]);
-
+    obstacle4.updateHealth(10);
 
     //put enemies into game ----------------------------------------------------------------------------------------
-    for (int i = 0; i < int(random(2,3.5)); i++) {
+    for (int i = 0; i < int(random(2, 3.5)); i++) {
       int x;
       int y;
 
@@ -198,11 +201,27 @@ class Scene {
       } while (room[x][y] != null);
 
       Direction dir = Direction.values()[int(random(Direction.values().length))];
-      Goblin goblin = new Goblin(dir);
+      Mummy mummy = new Mummy(dir);
 
-      room[x][y] = goblin;
-      positions.put(goblin, positionArray[x][y]);
-      enemies.add(goblin);
+      room[x][y] = mummy;
+      positions.put(mummy, positionArray[x][y]);
+      enemies.add(mummy);
+    }
+
+    //spawning interactables
+    for (int i = 0; i < int(random(2, 3.5)); i++) {
+      int x;
+      int y;
+
+      do {
+        x = int(random(1, roomWidth - 1));
+        y = int(random(1, roomHeight - 1));
+      } while (room[x][y] != null);
+
+      rootBeer beer = new rootBeer();
+
+      room[x][y] = beer;
+      positions.put(beer, positionArray[x][y]);
     }
   }
 
@@ -356,6 +375,10 @@ class Scene {
         } else {
           this.room[x][y] = null;
           this.positions.remove(enemy); //if the enemy dies remove it from the positions map
+          if (enemy instanceof Mummy){
+            player.updateHealth(10);
+          }
+          
         }
       }
 
@@ -369,6 +392,8 @@ class Scene {
       if (!interactable.interact(this.player)) {
         return false;
       }
+
+      this.positions.remove(interactable);
     } else if (this.room[x][y] != null) {
       return false;
     }
@@ -485,14 +510,14 @@ class Scene {
    */
 
   public void draw() {
-
+    background(89, 54, 40);
     // Determine the floor size
     float size = min((float)width / (this.roomWidth + 2), (float)height / (this.roomHeight + 2));
 
     translate( (width - roomWidth * size) * 0.5, (height - roomHeight * size) * 0.5 );
     push();
     fill(235, 155, 52);
-    stroke(0);
+    stroke(89, 54, 40);
     for (int i = 0; i < roomHeight; i++) {
 
       for (int q = 0; q < roomWidth; q++) {
@@ -564,5 +589,4 @@ class Scene {
 
 
 //whats left to do:
-//1. add logic to spawn interactables into the scene
 //2. finish the JSON constructor and serialize function

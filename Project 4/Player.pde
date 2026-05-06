@@ -1,5 +1,5 @@
 /**
- *      Author: Prof. Morales
+ *      Author: Prof. Morales, Gaven Machemer
  *      Course: CPSC 220
  *  Instructor: Prof. Morales
  *     Created: 2026-04-15
@@ -166,23 +166,24 @@ class Player extends Actor {
     super.draw();
     
     push();
+    float offset = sin(frameCount * 0.07) * 0.04; //figured out how to do this sin wave from this forum https://forum.processing.org/beta/num_1266372115.html
     imageMode(CENTER);
     switch(this.facing){
       
       case NORTH:
-        image(playerNorth, 0.5, 0.5, 0.5, 0.5); //everything gets scaled and translated in scene draw, by setting it at 0.5 its draw in the middle of the tile and then can be translated
+        image(playerNorth, 0.5 + offset, 0.5, 0.5, 0.5); //everything gets scaled and translated in scene draw, by setting it at 0.5 its draw in the middle of the tile and then can be translated
         break;
         
       case EAST:
-        image(playerEast, 0.5, 0.5, 0.5, 0.5);
+        image(playerEast, 0.5 + offset, 0.5, 0.5, 0.5);
         break;
         
       case SOUTH:
-        image(playerSouth, 0.5, 0.5, 0.5, 0.5);
+        image(playerSouth, 0.5 + offset, 0.5, 0.5, 0.5);
         break;
         
       case WEST:
-        image(playerWest, 0.5, 0.5, 0.5, 0.5);
+        image(playerWest, 0.5 + offset, 0.5, 0.5, 0.5);
         break;
         
     }

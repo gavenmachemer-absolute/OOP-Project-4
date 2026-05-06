@@ -9,7 +9,7 @@
  * Description: basic enemy actor
  */
 
-class Goblin extends Actor {
+class Mummy extends Actor {
 
   PImage enemyNorth;
   PImage enemyEast;
@@ -18,12 +18,12 @@ class Goblin extends Actor {
   PImage enemyDeath;
 
   /**
-   * Constructor: public Goblin()
+   * Constructor: public Mummy()
    *  Parameters: Direction facing - The direction the enemy starts facing
    * Description: constructs an enemy
    */
 
-  public Goblin(Direction facing) {
+  public Mummy(Direction facing) {
     super(40, 8, facing);
     loadSprites();
   }
@@ -38,7 +38,7 @@ class Goblin extends Actor {
   public JSONObject serialize() {
     JSONObject object = super.serialize();
     loadSprites();
-    object.setString("className", "Goblin");
+    object.setString("className", "Mummy");
     return object;
   }
 
@@ -54,11 +54,12 @@ class Goblin extends Actor {
     super.draw();
     
     push();
+    float offset = sin(frameCount * 0.07) * 0.04; //figured out how to do this sin wave from this forum https://forum.processing.org/beta/num_1266372115.html
     imageMode(CENTER);
     switch (this.facing) {
     case NORTH:
       if(this.getHealth() > 0){
-        image(enemyNorth, 0.5, 0.5, 0.5, 0.5);
+        image(enemyNorth, 0.5 + offset, 0.5, 0.5, 0.5);
       }
       else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
@@ -67,7 +68,7 @@ class Goblin extends Actor {
 
     case SOUTH:
       if(this.getHealth() > 0){
-        image(enemySouth, 0.5, 0.5, 0.5, 0.5);
+        image(enemySouth, 0.5 + offset, 0.5, 0.5, 0.5);
       }
       else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
@@ -76,7 +77,7 @@ class Goblin extends Actor {
 
     case EAST:
       if(this.getHealth() > 0){
-        image(enemyEast, 0.5, 0.5, 0.5, 0.5);
+        image(enemyEast, 0.5 + offset, 0.5, 0.5, 0.5);
       }
       else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
@@ -85,7 +86,7 @@ class Goblin extends Actor {
 
     case WEST:
       if(this.getHealth() > 0){
-        image(enemyWest, 0.5, 0.5, 0.5, 0.5);
+        image(enemyWest, 0.5 + offset, 0.5, 0.5, 0.5);
       }
       else {
         image(enemyDeath, 0.5, 0.5, 1, 1);

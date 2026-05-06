@@ -1,21 +1,39 @@
-class Obstacle extends WorldObject{
+class Obstacle extends Actor {
   PImage vase;
-  
-  Obstacle(){
+
+  Obstacle() {
+    super(10, 0, Direction.NORTH);
     vase = loadImage("vaseMorales.png");
   }
-  
-  
-  public JSONObject serialize(){
+
+  Action getAction() {
+    return null;
+  }
+
+  public JSONObject serialize() {
     JSONObject object = new JSONObject();
     object.setString("className", "Obstacle");
     return object;
   }
-  
-  void draw(){
+
+  void draw() {
+    float healthWidth = 0.4;
+    float healthHeight = 0.05;
+    float healthPercent = getHealth();
+
+    //health depleted background - red
     push();
+    rectMode(CENTER);
+    noStroke();
+    fill(255, 0, 0);
+    rect( 0.5, .05, healthWidth, healthHeight);
+
+    //current health - green
+    noStroke();
+    fill(0, 255, 0);
+    rect( 0.5, .05, healthWidth * healthPercent, healthHeight);
+    
     image(vase, 0, 0, 1, 1);
     pop();
   }
-    
 }
