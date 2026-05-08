@@ -6,12 +6,17 @@ class Obstacle extends Actor {
     vase = loadImage("vaseMorales.png");
   }
 
+  Obstacle(JSONObject object) {
+    super(object);
+    vase = loadImage("vaseMorales.png");
+  }
+
   Action getAction() {
     return null;
   }
 
   public JSONObject serialize() {
-    JSONObject object = new JSONObject();
+    JSONObject object = super.serialize();
     object.setString("className", "Obstacle");
     return object;
   }
@@ -32,7 +37,7 @@ class Obstacle extends Actor {
     noStroke();
     fill(0, 255, 0);
     rect( 0.5, .1, healthWidth * healthPercent, healthHeight);
-    
+
     image(vase, 0, 0, 1, 1);
     pop();
   }

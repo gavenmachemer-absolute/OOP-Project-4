@@ -70,10 +70,80 @@ class Scene {
   //scene constructor used WHEN LOADING FROM A JSON FILE
   Scene(JSONObject object) {
     loadSprites();
+    //room height and width
     this.roomWidth = object.getInt("roomWidth");
     this.roomHeight = object.getInt("roomHeight");
 
-    //need to finish setting the info in here so that when scene is constructed from a JSON it has the data it needs
+    //entry direction
+    this.entry = Direction.valueOf(object.getString("entry")); //value of function found on here https://www.tutorialspoint.com/java/number_valueof.htm
+    //room
+    this.room = new WorldObject[roomWidth][roomHeight];
+    //enemies
+    this.enemies = new LinkedList<Actor>();
+    //positions
+    this.positions = new  HashMap<WorldObject, Position>();
+    //doors
+    this.doors = new HashMap<Direction, Position>();
+    //position array
+    this.positionArray = new Position[roomWidth][roomHeight];
+
+    //obstacles
+    obstacle1 = new Obstacle();
+    obstacle2 = new Obstacle();
+    obstacle3 = new Obstacle();
+    obstacle4 = new Obstacle();
+
+    //room grid
+    for (int y = 0; y < roomHeight; y++) {
+
+      for (int x = 0; x < roomWidth; x++) {
+        //logical grid
+        room[x][y] = null;
+        //position grid for drawing
+        positionArray[x][y] = new Position(x, y, this);
+      }
+    }
+
+    //player
+    JSONObject playerObject = object.getJSONObject("player");
+    this.player = new Player(object.getJSONObject("player"));
+    room[playerObject.getInt("x")][playerObject.getInt("y")] = this.player;
+    Position playerPosition = new Position(playerObject.getInt("x"), playerObject.getInt("y"), this); //had to make a new position cause the door was sticking to the player
+    positions.put(this.player, playerPosition);
+
+    //doors
+    JSONArray doorArray = object.getJSONArray("doors");
+    for (int i = 0; i < doorArray.size(); i++) {
+
+      JSONObject doorObject = doorArray.getJSONObject(i);
+      Direction dir = Direction.valueOf(doorObject.getString("direction"));
+      doors.put(dir, positionArray[doorObject.getInt("x")][doorObject.getInt("y")]);
+    }
+
+    //world objects
+    JSONArray objectsArray = object.getJSONArray("objects");
+
+    for (int i = 0; i < objectsArray.size(); i++) {
+
+      JSONObject objData = objectsArray.getJSONObject(i);
+      WorldObject obj = null;
+
+      if (objData.getString("className").equals("Mummy")) { //where i figured out how to compare strings https://processing.org/reference/String_equals_.html
+        obj = new Mummy(objData);
+        enemies.add((Actor)obj);
+      }
+
+      if (objData.getString("className").equals("Obstacle")) {
+        obj = new Obstacle(objData);
+      }
+
+      if (objData.getString("className").equals("rootBeer")) {
+        obj = new rootBeer(objData);
+      }
+
+      room[objData.getInt("x")][objData.getInt("y")] = obj;
+      positions.put(obj, positionArray[objData.getInt("x")][objData.getInt("y")]);
+    }
   }
 
 
@@ -81,16 +151,49 @@ class Scene {
   //sets everything INSIDE A JSON OBJECT THAT CAN LATER BE LOADED
   JSONObject serialize() {
     JSONObject object = new JSONObject();
+
+    //room width and height
     object.setInt("roomWidth", this.roomWidth);
     object.setInt("roomHeight", this.roomHeight);
 
+    //entry direction
+    object.setString("entry", this.entry.name()); //learned how to get name here https://stackoverflow.com/questions/18111657/how-to-get-names-of-enum-entries
 
+    //player
+    JSONObject playerObject = this.player.serialize();
+    //player position
+    playerObject.setInt("x", this.positions.get(this.player).getX());
+    playerObject.setInt("y", this.positions.get(this.player).getY());
 
-    //how do you set these arrays up to save data when the size of the array will be random because of the room generation
+    object.setJSONObject("player", playerObject);
 
-    //when making array of arrays you have to construct new jsonarrays for every row of arrays
-    //make a 2d array to store what data is on what tile/square (enemy, player, obstacle, interactable, null)
-    //need to serialize everything in the room HERE
+    //doors
+    JSONArray doorArray = new JSONArray();
+    //cycle through each directions door, used in the same way in draww
+    for (Direction dir : this.doors.keySet()) {
+      JSONObject doorObject = new JSONObject();
+      doorObject.setString("direction", dir.name());
+      doorObject.setInt("x", this.doors.get(dir).getX());
+      doorObject.setInt("y", this.doors.get(dir).getY());
+
+      doorArray.append(doorObject);
+    }
+    object.setJSONArray("doors", doorArray);
+
+    //world objects
+    JSONArray worldObjectsArray = new JSONArray();
+    //cycle through each world object, used in the same way in draw
+    for (WorldObject obj : this.positions.keySet()) {
+
+      if (obj != this.player && obj != null && this.positions.get(obj) != null) {
+        JSONObject worldObject = obj.serialize();
+        worldObject.setInt("x", this.positions.get(obj).getX());
+        worldObject.setInt("y", this.positions.get(obj).getY());
+        worldObjectsArray.append(worldObject);
+      }
+    }
+    object.setJSONArray("objects", worldObjectsArray);
+
     return object;
   }
 
@@ -130,20 +233,12 @@ class Scene {
     }
 
     //doors and player------------------------------------------------------------------------
-
-    // North door
     doors.put(Direction.NORTH, positionArray[int(random(2, roomWidth - 2))][0]);
-
-    // South door
     doors.put(Direction.SOUTH, positionArray[int(random(2, roomWidth - 2))][roomHeight - 1]);
-
-    // West door
     doors.put(Direction.WEST, positionArray[0][int(random(2, roomHeight-2))]);
-
-    // East door
     doors.put(Direction.EAST, positionArray[roomWidth - 1][int(random(2, roomHeight - 2))]);
 
-    //this is where you can put obstacles and interactables into the hashmap now that all positions have been created
+    //this is wher you can put obstacles and interactables into the hashmap now that all positions have been created
     Position playerStart = new Position(doors.get(entry.inverse()).getX(), doors.get(entry.inverse()).getY(), this);
     room[ playerStart.getX() ][ playerStart.getY() ] = player;
     positions.put(player, playerStart );  //everytime you set the player or anything elses position in room you HAVE TO SET the position in the position hashmap immediately after
@@ -181,7 +276,7 @@ class Scene {
     room[r5][r6] = obstacle3;
     positions.put(obstacle3, positionArray[r5][r6]);
     obstacle3.updateHealth(10);
- 
+
     do {
       r7 = int(random(1, roomWidth - 1));
       r8 = int(random(1, roomHeight - 1));
@@ -375,10 +470,9 @@ class Scene {
         } else {
           this.room[x][y] = null;
           this.positions.remove(enemy); //if the enemy dies remove it from the positions map
-          if (enemy instanceof Mummy){
+          if (enemy instanceof Mummy) {
             player.updateHealth(10);
           }
-          
         }
       }
 
@@ -394,6 +488,7 @@ class Scene {
       }
 
       this.positions.remove(interactable);
+      this.room[x][y] = null;
     } else if (this.room[x][y] != null) {
       return false;
     }
@@ -574,7 +669,7 @@ class Scene {
 
     for (WorldObject obj : positions.keySet()) {  //trying to loop through every world object room to get their position and then translate them to the correct position visually
 
-      if (positions.get(obj) != null) {
+      if (positions.get(obj) != null && obj != null) {
         push();
         translate(positions.get(obj).getX(), positions.get(obj).getY());
         obj.draw();
@@ -583,7 +678,3 @@ class Scene {
     }
   }
 }
-
-
-//whats left to do:
-//2. finish the JSON constructor and serialize function

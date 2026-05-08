@@ -5,6 +5,10 @@ class rootBeer extends Interactable {
     beer = loadImage("beersWithMorales2029.png");
   }
 
+  rootBeer(JSONObject object) {
+    beer = loadImage("beersWithMorales2029.png");
+  }
+
   boolean interact(Player player) {
     player.updateHealth(20);
     return true;

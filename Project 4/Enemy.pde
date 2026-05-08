@@ -28,6 +28,10 @@ class Mummy extends Actor {
     loadSprites();
   }
 
+  public Mummy(JSONObject object) {
+    super(object);
+    loadSprites();
+  }
   /**
    *      Method: public serialize()
    *  Parameters: void
@@ -37,7 +41,6 @@ class Mummy extends Actor {
 
   public JSONObject serialize() {
     JSONObject object = super.serialize();
-    loadSprites();
     object.setString("className", "Mummy");
     return object;
   }
@@ -52,49 +55,44 @@ class Mummy extends Actor {
   public void draw() {
     //draw health bar from extended actor class
     super.draw();
-    
+
     push();
     float offset = sin(frameCount * 0.07) * 0.04; //figured out how to do this sin wave from this forum https://forum.processing.org/beta/num_1266372115.html
     imageMode(CENTER);
     switch (this.facing) {
     case NORTH:
-      if(this.getHealth() > 0){
+      if (this.getHealth() > 0) {
         image(enemyNorth, 0.5 + offset, 0.5, 0.5, 0.5);
-      }
-      else {
+      } else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
       }
       break;
 
     case SOUTH:
-      if(this.getHealth() > 0){
+      if (this.getHealth() > 0) {
         image(enemySouth, 0.5 + offset, 0.5, 0.5, 0.5);
-      }
-      else {
+      } else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
       }
       break;
 
     case EAST:
-      if(this.getHealth() > 0){
+      if (this.getHealth() > 0) {
         image(enemyEast, 0.5 + offset, 0.5, 0.5, 0.5);
-      }
-      else {
+      } else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
       }
       break;
 
     case WEST:
-      if(this.getHealth() > 0){
+      if (this.getHealth() > 0) {
         image(enemyWest, 0.5 + offset, 0.5, 0.5, 0.5);
-      }
-      else {
+      } else {
         image(enemyDeath, 0.5, 0.5, 1, 1);
       }
       break;
     }
     pop();
-
   }
 
 
@@ -156,7 +154,7 @@ class Mummy extends Actor {
     int start = int(random(moves.length));
 
     for (int i = 0; i < moves.length; i++) {
-      Action action = moves[(start+1) % moves.length];
+      Action action = moves[(start+i) % moves.length];
 
       if (this.getActionValidity(action)) {
         this.facing = action.direction;

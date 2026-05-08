@@ -1,4 +1,102 @@
 {
-  "roomWidth": 12,
-  "roomHeight": 11
+  "roomWidth": 15,
+  "doors": [
+    {
+      "x": 14,
+      "y": 5,
+      "direction": "EAST"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "direction": "SOUTH"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "direction": "WEST"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "direction": "NORTH"
+    }
+  ],
+  "entry": "SOUTH",
+  "roomHeight": 8,
+  "objects": [
+    {
+      "damage": 8,
+      "x": 12,
+      "facing": "WEST",
+      "y": 4,
+      "maxHealth": 40,
+      "className": "Mummy",
+      "currHealth": 10
+    },
+    {
+      "damage": 0,
+      "x": 5,
+      "facing": "NORTH",
+      "y": 6,
+      "maxHealth": 10,
+      "className": "Obstacle",
+      "currHealth": 10
+    },
+    {
+      "damage": 8,
+      "x": 12,
+      "facing": "SOUTH",
+      "y": 0,
+      "maxHealth": 40,
+      "className": "Mummy",
+      "currHealth": 0
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "className": "rootBeer"
+    },
+    {
+      "damage": 0,
+      "x": 9,
+      "facing": "NORTH",
+      "y": 4,
+      "maxHealth": 10,
+      "className": "Obstacle",
+      "currHealth": 0
+    },
+    {
+      "damage": 0,
+      "x": 4,
+      "facing": "NORTH",
+      "y": 2,
+      "maxHealth": 10,
+      "className": "Obstacle",
+      "currHealth": 0
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "className": "rootBeer"
+    },
+    {
+      "damage": 0,
+      "x": 11,
+      "facing": "NORTH",
+      "y": 6,
+      "maxHealth": 10,
+      "className": "Obstacle",
+      "currHealth": 10
+    }
+  ],
+  "player": {
+    "damage": 10,
+    "x": 11,
+    "facing": "EAST",
+    "y": 4,
+    "maxHealth": 100,
+    "className": "Player",
+    "currHealth": 52
+  }
 }
