@@ -1,102 +1,79 @@
 {
-  "roomWidth": 15,
+  "roomWidth": 10,
   "doors": [
     {
-      "x": 14,
-      "y": 5,
+      "x": 9,
+      "y": 3,
       "direction": "EAST"
     },
     {
       "x": 4,
-      "y": 7,
+      "y": 12,
       "direction": "SOUTH"
     },
     {
       "x": 0,
-      "y": 5,
+      "y": 9,
       "direction": "WEST"
     },
     {
-      "x": 6,
+      "x": 7,
       "y": 0,
       "direction": "NORTH"
     }
   ],
   "entry": "SOUTH",
-  "roomHeight": 8,
+  "roomHeight": 13,
   "objects": [
     {
-      "damage": 8,
-      "x": 12,
-      "facing": "WEST",
-      "y": 4,
-      "maxHealth": 40,
-      "className": "Mummy",
-      "currHealth": 10
-    },
-    {
       "damage": 0,
-      "x": 5,
+      "x": 1,
       "facing": "NORTH",
-      "y": 6,
+      "y": 1,
       "maxHealth": 10,
       "className": "Obstacle",
-      "currHealth": 10
-    },
-    {
-      "damage": 8,
-      "x": 12,
-      "facing": "SOUTH",
-      "y": 0,
-      "maxHealth": 40,
-      "className": "Mummy",
       "currHealth": 0
     },
     {
-      "x": 13,
-      "y": 6,
-      "className": "rootBeer"
-    },
-    {
-      "damage": 0,
-      "x": 9,
-      "facing": "NORTH",
-      "y": 4,
-      "maxHealth": 10,
-      "className": "Obstacle",
+      "damage": 8,
+      "x": 2,
+      "facing": "EAST",
+      "y": 8,
+      "maxHealth": 40,
+      "className": "Mummy",
       "currHealth": 0
     },
     {
       "damage": 0,
       "x": 4,
       "facing": "NORTH",
-      "y": 2,
+      "y": 11,
       "maxHealth": 10,
       "className": "Obstacle",
-      "currHealth": 0
+      "currHealth": 10
     },
     {
-      "x": 1,
-      "y": 5,
+      "x": 3,
+      "y": 6,
       "className": "rootBeer"
     },
     {
       "damage": 0,
-      "x": 11,
+      "x": 8,
       "facing": "NORTH",
-      "y": 6,
+      "y": 7,
       "maxHealth": 10,
       "className": "Obstacle",
-      "currHealth": 10
+      "currHealth": 0
     }
   ],
   "player": {
     "damage": 10,
-    "x": 11,
+    "x": 7,
     "facing": "EAST",
-    "y": 4,
+    "y": 7,
     "maxHealth": 100,
     "className": "Player",
-    "currHealth": 52
+    "currHealth": 54
   }
 }
