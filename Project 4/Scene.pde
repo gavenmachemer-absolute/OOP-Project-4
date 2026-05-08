@@ -147,7 +147,6 @@ class Scene {
   }
 
 
-
   //sets everything INSIDE A JSON OBJECT THAT CAN LATER BE LOADED
   JSONObject serialize() {
     JSONObject object = new JSONObject();

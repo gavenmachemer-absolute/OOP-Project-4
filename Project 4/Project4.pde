@@ -14,6 +14,7 @@ import processing.sound.*;
 Scene scene;
 String fileName;
 SoundFile backgroundMusic;
+
 /**
  *      Method: setup()
  *  Parameters: void
@@ -30,7 +31,7 @@ void setup() {
   backgroundMusic.amp(0.35);
   backgroundMusic.loop();
   
-  fileName = "data" + File.separator + "save.json";
+  fileName = sketchPath("data/save.json");
   File file = new File(fileName);
 
   if (file.exists()) {
@@ -60,7 +61,7 @@ void draw() {
     // Save the state of the scene
     saveJSONObject(scene.serialize(), fileName);
   }
-
+  
   scene.draw();
 }
 
@@ -85,6 +86,3 @@ void keyPressed() {
 void keyReleased() {
   scene.keyReleased();
 }
-
-
-//hello this is a test

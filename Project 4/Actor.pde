@@ -1,5 +1,5 @@
 /**
- *      Author: Prof. Morales
+ *      Author: Prof. Morales, Gaven Machemer
  *      Course: CPSC 220
  *  Instructor: Prof. Morales
  *     Created: 2026-04-15
@@ -152,7 +152,6 @@ abstract class Actor extends WorldObject {
     fill(0, 255, 0);
     rect( 0.1 , .05, healthWidth * healthPercent, healthHeight);
     pop();
-    
     
   }
 }
