@@ -153,7 +153,12 @@ class Player extends Actor {
       debounce.put(released, false);
     }
   }
-  
+ /**
+ *      Method: loadSprites()
+ *  Parameters: void
+ *      Return: void
+ * Description: Loads the images of Player.
+ */
   void loadSprites(){
     playerNorth = loadImage("4playerNorth.png");
     playerEast = loadImage("4playerEast.png");
@@ -161,6 +166,12 @@ class Player extends Actor {
     playerWest = loadImage("4playerWest.png");
   }
   
+ /**
+ *      Method: draw()
+ *  Parameters: void
+ *      Return: void
+ * Description: Draws the player
+ */
   void draw(){  //scene.positions
     
     super.draw();

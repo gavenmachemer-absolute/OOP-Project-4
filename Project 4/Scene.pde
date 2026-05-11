@@ -23,11 +23,13 @@ class Scene {
   private HashMap<WorldObject, Position> positions;
   private HashMap<Direction, Position> doors;
   Position[][] positionArray;    //array to create a cell for every position index; so world Objects can later be put into it
+  //Obstacles
   Obstacle obstacle1;
   Obstacle obstacle2;
   Obstacle obstacle3;
   Obstacle obstacle4;
-
+  
+  //doors
   PImage topDoorO;
   PImage topDoorC;
 
@@ -243,6 +245,9 @@ class Scene {
     positions.put(player, playerStart );  //everytime you set the player or anything elses position in room you HAVE TO SET the position in the position hashmap immediately after
 
     //obstacle focused------------------------------------------------------------------------------
+    //Each obstacle takes a set of rNum variables.
+    //r1,r2 obstacle one, r3,r4 obstacle two, etc.
+    //these eight variables are used to determine obstacle position in the room.
     int r1;
     int r2;
     int r3;
@@ -251,7 +256,8 @@ class Scene {
     int r6;
     int r7;
     int r8;
-
+    
+    //start obstacle placement logic
     do {
       r1 = int(random(1, roomWidth - 1));
       r2 = int(random(1, roomHeight - 1));
@@ -283,6 +289,7 @@ class Scene {
     room[r7][r8] = obstacle4;
     positions.put(obstacle4, positionArray[r7][r8]);
     obstacle4.updateHealth(10);
+    //end obstacle placement logic.
 
     //put enemies into game ----------------------------------------------------------------------------------------
     for (int i = 0; i < int(random(2, 3.5)); i++) {
@@ -321,7 +328,12 @@ class Scene {
 
 
 
-
+ /**
+ *      Method: loadSprites()
+ *  Parameters: void
+ *      Return: void
+ * Description: Loads the images of the Doors.
+ */
   void loadSprites() {
     topDoorO = loadImage("topDoorOpen.png");
     topDoorC = loadImage("topDoorClosed.png");

@@ -6,7 +6,7 @@
  *         Due: 2026-05-10
  *  Assignment: Project 4
  *        File: Enemy.pde
- * Description: basic enemy actor
+ * Description:    
  */
 
 class Mummy extends Actor {
@@ -167,7 +167,12 @@ class Mummy extends Actor {
     return null;
   }
 
-
+  /**
+ *      Method: loadSprites()
+ *  Parameters: void
+ *      Return: void
+ * Description: Loads the images of Enemy.
+ */
   void loadSprites() {
     enemyNorth = loadImage("mummyNorth.png");
     enemyEast = loadImage("mummyEast.png");

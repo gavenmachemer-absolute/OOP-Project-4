@@ -132,7 +132,12 @@ abstract class Actor extends WorldObject {
 
   abstract public Action getAction();
   
-  
+ /**
+ *      Method: draw()
+ *  Parameters: void
+ *      Return: void
+ * Description: Draws health bars
+ */
   void draw(){
     
     float healthWidth = 0.8;
