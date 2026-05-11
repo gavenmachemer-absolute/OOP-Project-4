@@ -1,11 +1,11 @@
 /**
- *      Author: Flynn Quiram
+ *      Author: Flynn Quiram, Gaven Machemer
  *      Course: CPSC 220
  *  Instructor: Prof. Morales
  *     Created: 2026-04-15
  *         Due: 2026-05-10
  *  Assignment: Project 4
- *        File: Project4.pde
+ *        File: Obstacle.pde
  * Description: Obstacles for the game
  */
  

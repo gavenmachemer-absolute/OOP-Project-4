@@ -44,6 +44,11 @@ class Scene {
 
 
   //scene constructor used WHEN NO JSON FILE IS BEING LOADED FROM
+  /**
+   * Constructor: Scene()
+   *  Parameters: none
+   * Description: constructs the scene
+   */
   Scene() {
     loadSprites();
     roomWidth = 10 + int(random(6));
@@ -70,6 +75,11 @@ class Scene {
 
 
   //scene constructor used WHEN LOADING FROM A JSON FILE
+  /**
+   * Constructor: public Scene()
+   *  Parameters: JSONObject object
+   * Description: constructs the scene using saved data
+   */
   Scene(JSONObject object) {
     loadSprites();
     //room height and width
@@ -150,6 +160,12 @@ class Scene {
 
 
   //sets everything INSIDE A JSON OBJECT THAT CAN LATER BE LOADED
+  /**
+   *      Method: serialize()
+   *  Parameters: void
+   *      Return: JSONObject - A JSON serialization of the object
+   * Description: Serializes the object to JSON
+   */
   JSONObject serialize() {
     JSONObject object = new JSONObject();
 

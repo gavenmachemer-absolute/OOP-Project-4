@@ -5,7 +5,7 @@
  *     Created: 2026-04-15
  *         Due: 2026-05-10
  *  Assignment: Project 4
- *        File: Project4.pde
+ *        File: rootBeer.pde
  * Description: rootBeer interactable item- health pack/health
  *              point replenishing item of the game
  */
